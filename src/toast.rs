@@ -99,7 +99,7 @@ where
             .height(Length::Shrink)
             .padding(Padding {
                 top: 10.0,
-                right: 10.0,
+                right: 0.0,
                 bottom: 10.0,
                 left: 20.0,
             })
@@ -141,44 +141,43 @@ where
             })
             .unwrap_or_else(|| Space::new().into());
 
-        let dismiss_button: Element<Message> = container(
-            button(text("×").size(28))
-                .style(|theme: &Theme, status| {
-                    let palette = theme.extended_palette();
+        let dismiss_button: Element<Message> = button(text("×").size(text_size))
+            .style(|theme: &Theme, status| {
+                let palette = theme.extended_palette();
 
-                    let background = match status {
-                        button::Status::Active => None,
-                        button::Status::Hovered => Some(palette.background.weak.color),
-                        button::Status::Pressed => Some(palette.background.strong.color),
-                        button::Status::Disabled => None,
-                    }
-                    .map(iced::Background::Color);
+                let background = match status {
+                    button::Status::Active => None,
+                    button::Status::Hovered => Some(palette.background.weak.color),
+                    button::Status::Pressed => Some(palette.background.strong.color),
+                    button::Status::Disabled => None,
+                }
+                .map(iced::Background::Color);
 
-                    button::Style {
-                        background,
-                        text_color: palette.background.base.text,
-                        border: iced::Border {
-                            color: Color::TRANSPARENT,
-                            width: 0.0,
-                            radius: 5.0.into(),
-                        },
-                        ..button::Style::default()
-                    }
-                })
-                .width(40)
-                .on_press(toast.on_dismiss),
-        )
-        .center_y(Length::Fill)
-        .height(Length::Fixed(55.0))
-        .into();
-
-        let right_padding = Space::new().width(4).height(Length::Fixed(55.0));
+                button::Style {
+                    background,
+                    text_color: palette.background.base.text,
+                    border: iced::Border {
+                        color: Color::TRANSPARENT,
+                        width: 0.0,
+                        radius: 0.0.into(),
+                    },
+                    ..button::Style::default()
+                }
+            })
+            .padding(Padding {
+                top: 10.0,
+                right: 10.0,
+                bottom: 10.0,
+                left: 10.0,
+            })
+            .on_press(toast.on_dismiss)
+            .into();
 
         let style_fn_left_border = style_fn.clone().0;
         let style_fn_container = style_fn.clone().0;
         let toast_element: Element<Message> = container(
             left_border(
-                row![content, action_button, dismiss_button, right_padding]
+                row![content, action_button, dismiss_button]
                     .height(Length::Shrink)
                     .align_y(Alignment::Center),
             )
