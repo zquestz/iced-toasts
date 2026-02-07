@@ -167,9 +167,9 @@ pub mod alignment {
         Right,
     }
 
-    impl Into<iced::alignment::Alignment> for Horizontal {
-        fn into(self) -> iced::alignment::Alignment {
-            match self {
+    impl From<Horizontal> for iced::alignment::Alignment {
+        fn from(val: Horizontal) -> Self {
+            match val {
                 Horizontal::Left => iced::alignment::Horizontal::Left,
                 Horizontal::Center => iced::alignment::Horizontal::Center,
                 Horizontal::Right => iced::alignment::Horizontal::Right,
@@ -185,9 +185,9 @@ pub mod alignment {
         Bottom,
     }
 
-    impl Into<iced::alignment::Alignment> for Vertical {
-        fn into(self) -> iced::alignment::Alignment {
-            match self {
+    impl From<Vertical> for iced::alignment::Alignment {
+        fn from(val: Vertical) -> Self {
+            match val {
                 Vertical::Top => iced::alignment::Vertical::Top,
                 Vertical::Bottom => iced::alignment::Vertical::Bottom,
             }
@@ -762,7 +762,7 @@ impl<'a, Message> overlay::Overlay<Message, Theme, Renderer> for Overlay<'a, '_,
                 );
             });
 
-        ()
+
     }
 
     fn mouse_interaction(
@@ -871,7 +871,7 @@ struct StyleFn<'a>(Rc<dyn Fn(&iced::Theme) -> Style + 'a>);
 impl<'a> Default for StyleFn<'a> {
     fn default() -> Self {
         StyleFn(Rc::new(|theme: &iced::Theme| {
-            let palette = theme.extended_palette().clone();
+            let palette = *theme.extended_palette();
             Style {
                 text_color: Some(palette.background.base.text),
                 background: Some(palette.background.base.color.into()),

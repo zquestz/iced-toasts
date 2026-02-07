@@ -96,7 +96,7 @@ where
         renderer: &Renderer,
         limits: &layout::Limits,
     ) -> layout::Node {
-        layout::contained(&limits, self.width, self.height, |limits| {
+        layout::contained(limits, self.width, self.height, |limits| {
             self.content.as_widget_mut().layout(tree, renderer, limits)
         })
     }
@@ -220,7 +220,7 @@ where
                     width: border.width * 2.0,
                     ..bounds
                 },
-                border: border.clone(),
+                border: *border,
                 shadow: Shadow::default(),
                 snap: false,
             },
